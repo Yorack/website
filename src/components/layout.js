@@ -5,16 +5,53 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {graphql, useStaticQuery} from 'gatsby';
-import Menu from './menu';
 
 import Header from './header';
 import '../style/layout.css';
-import Button from '@material-ui/core/Button';
+import {createMuiTheme} from '@material-ui/core';
+import {connect} from 'react-redux';
+import ThemeProvider from '@material-ui/styles/ThemeProvider';
 
-const Layout = ({children}) => {
+const theme = createMuiTheme({
+    palette: {
+        primary: {
+            main: '#2980b9'
+        },
+        secondary: {
+            main: '#c0392b'
+        },
+    },
+});
+
+const appThemeOptions = {
+    LIGHT: {
+        palette: {
+            type: 'light',
+            primary: {
+                main: '#2980b9'
+            },
+            secondary: {
+                main: '#c0392b'
+            },
+        },
+    },
+    DARK: {
+        palette: {
+            type: 'dark',
+            primary: {
+                main: '#2c3e50',
+            },
+            secondary: {
+                main: '#8e44ad',
+            },
+        },
+    }
+};
+
+const Layout = ({children, storeTheme}) => {
     const data = useStaticQuery(graphql`
         query SiteTitleQuery {
           site {
@@ -25,8 +62,11 @@ const Layout = ({children}) => {
         }
     `);
 
+    const theme = storeTheme === 'DARK' ? appThemeOptions.DARK : appThemeOptions.LIGHT;
+
     return (
-        <>
+        <ThemeProvider theme={createMuiTheme(theme)}>
+
             <Header siteTitle={data.site.siteMetadata.title}/>
             <div
                 style={{
@@ -45,7 +85,7 @@ const Layout = ({children}) => {
                     <a href="https://www.gatsbyjs.org">Gatsby</a>
                 </footer>
             </div>
-        </>
+        </ThemeProvider>
     );
 };
 
@@ -53,4 +93,10 @@ Layout.propTypes = {
     children: PropTypes.node.isRequired,
 };
 
-export default Layout;
+const mapStateToProps = (state) => {
+    return {
+        storeTheme: state.app.theme,
+    };
+};
+
+export default connect(mapStateToProps)(Layout);

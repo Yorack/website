@@ -1,13 +1,20 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import { createStore as reduxCreateStore } from 'redux';
+import {Provider} from 'react-redux';
 import Store from './Store';
+import {ThemeProvider} from '@material-ui/styles';
+import {createMuiTheme} from '@material-ui/core/styles';
 
 const createStore = () => {
     const store = Store.initialize();
     return store;
 }
 
-export default ({ element }) => (
-    <Provider store={createStore()}>{element}</Provider>
-);
+export default ({ element }) => {
+    const store = Store.initialize();
+
+    return (
+        <Provider store={store}>
+            {element}
+        </Provider>
+    )
+};

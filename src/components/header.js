@@ -1,6 +1,6 @@
 // import {Link} from 'gatsby';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, {useState} from 'react';
 import Menu from './menu';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -11,8 +11,11 @@ import InvertColors from '@material-ui/icons/InvertColors';
 import {bindActionCreators} from 'redux';
 import {actions} from '../redux/actions';
 import {connect} from 'react-redux';
+import Drawer from '@material-ui/core/Drawer';
 
 const Header = ({siteTitle, theme, actions}) => {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const toggleTheme = () => {
         actions.toggleTheme();
     };
@@ -25,7 +28,7 @@ const Header = ({siteTitle, theme, actions}) => {
                 <IconButton
                     color="inherit"
                     aria-label="open drawer"
-                    onClick={() => console.log("Hello world")}
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
                     edge="start"
                     // className={clsx(classes.menuButton, open && classes.hide)}
                 >
@@ -45,6 +48,10 @@ const Header = ({siteTitle, theme, actions}) => {
                     <InvertColors />
                 </IconButton>
             </Toolbar>
+
+            <Drawer open={isMenuOpen} onClose={() => setIsMenuOpen(!isMenuOpen)}>
+                Menu comming soon ! !!!!!!!!!!!
+            </Drawer>
         </AppBar>
         // <header
         //     style={{
